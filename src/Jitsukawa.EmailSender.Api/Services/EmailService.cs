@@ -1,6 +1,5 @@
 ﻿using Jitsukawa.EmailSender.Api.Models;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
@@ -46,7 +45,7 @@ namespace Jitsukawa.EmailSender.Api.Services
 
                     await client.SendMailAsync(email);
                 }
-                catch (Exception e1)
+                catch
                 {
                     fails.Add(recipient);
                 }
