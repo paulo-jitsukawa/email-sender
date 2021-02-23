@@ -22,6 +22,7 @@ namespace Jitsukawa.EmailSender.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<CustomerService>();
             services.AddScoped<EmailService>();
 
             services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
