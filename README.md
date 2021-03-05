@@ -8,9 +8,10 @@ Web API Rest para o envio de emails.
 - Não necessita de certificado SSL.
 
 ## Requisitos
-- Para compilar e executar: *plataforma [.Net 5](https://dotnet.microsoft.com/download) ou superior*.
+- Para compilar e executar: *plataforma [.Net 5 ou superior](https://dotnet.microsoft.com/download)*.
 - Para explorar e alterar: *[Visual Studio](https://visualstudio.microsoft.com/pt-br/) ou outra IDE com suporte a projetos Web API do .Net 5*.
 - Para testar: *ferramenta Rest como [Postman](https://www.postman.com) ou [Insomnia](https://insomnia.rest) ou cliente HTTP como [cURL](https://curl.se)*.
+- Para implantar no Docker: *crie um diretório "publish" e copie para ele a aplicação compilada, copie o Dockerfile do projeto para o diretório pai do diretório criado e proceda de acordo com as [instruções oficiais da plataforma](https://docs.docker.com/engine/reference/builder/). (Você também pode buscar por mais informações sobre as [imagens oficiais da Microsoft](https://docs.microsoft.com/pt-br/dotnet/architecture/microservices/net-core-net-framework-containers/official-net-docker-images) ou detalhes da [imagem utilizada neste projeto](https://hub.docker.com/_/microsoft-dotnet-aspnet))*.
 
 ## Como Usar
 
