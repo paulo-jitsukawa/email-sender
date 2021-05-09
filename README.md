@@ -27,7 +27,7 @@ Web API Rest para o envio de emails.
 Os cabeçalhos *POST*, *[Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization)* e *Content-Type* precisam respeitar o formato abaixo.
 
 ```xml
-POST /api/email HTTP/1.1
+POST /api/v1/email HTTP/1.1
 Authorization: ApiKey <chave_privada_do_cliente>
 Content-Type: application/json
 ```
@@ -47,7 +47,7 @@ O corpo da mensagem deve ser construído da seguinte maneira:
 
 Envio de mensagem do cliente de chave privada *8bb2c0e5dd2142c1957094b4670ebc2a* para dois destinatários:
 ```
-POST /api/email HTTP/1.1
+POST /api/v1/email HTTP/1.1
 Host: localhost:5000
 User-Agent: insomnia/2020.5.2
 Authorization: ApiKey 8bb2c0e5dd2142c1957094b4670ebc2a

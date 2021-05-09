@@ -5,14 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Jitsukawa.EmailSender.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/v1/[Controller]")]
     public class EmailController : Controller
     {
         private EmailService emailService;
@@ -27,35 +26,48 @@ namespace Jitsukawa.EmailSender.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Send([FromBody] EmailMessage email, [FromHeader] string Authorization)
+        public async Task<IActionResult> Send([FromHeader] string Authorization, [FromBody] EmailMessage email)
         {
             // Resgata cliente autorizado
             var id = Authorization.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
             var customer = customerService.Get(id);
-
-            var fails = await emailService.Send(email);
-
-            // Concatena destinatários
-            var sbAll = new StringBuilder();
-            email.Recipients.ToList().ForEach(e => sbAll.Append($"{e}, "));
-            var strAll = sbAll.ToString().TrimEnd(',', ' ');
-
-            var template = $"Envio de email(s) de {customer?.Name ?? "<Desconhecido>"} para {strAll}:";
-
-            if (fails.Length == 0)
+            if (customer == null)
             {
-                logger.LogInformation($"{template} Nenhuma falha.");
-                return Ok();
+                return Unauthorized();
             }
 
-            // Concatena destinatários cujo envio falhou
-            var sbFails = new StringBuilder();
-            fails.ToList().ForEach(r => sbFails.Append($"{r}, "));
-            var strFails = sbFails.ToString().TrimEnd(',', ' ');
+            try
+            {
+                await emailService.Send(email);
 
-            logger.LogWarning($"{template} Falhou(aram) {strFails}.");
-            
-            return BadRequest(new { fails });
+                // Monta e registra log de informação contendo destinatários da mensagem
+                var log = $"Cliente {customer.Name} enviou emails para: ";
+                email.Recipients.ToList().ForEach(r => log += $"{r}, ");
+                logger.LogInformation(log.TrimEnd(' ', ','));
+
+                return Ok();
+            }
+            catch (Fail f)
+            {
+                // Monta e registra log de alerta contendo destinatários da mensagem
+                var log = $"Cliente {customer.Name} tentou enviar emails para: ";
+                email.Recipients.ToList().ForEach(r => log += $"{r}, ");
+                logger.LogWarning($"{log.TrimEnd(' ', ',')}. {f.Message}");
+
+                return BadRequest(new
+                {
+                    type = "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/422",
+                    title = "One or more emails have not been sent.",
+                    status = 422,
+                    errors = f.Message.Split(':')[1].Trim(' ', '.').Split(',')
+                });
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"Cliente {customer.Name} tentou enviar emails: {e.Message}.{Environment.NewLine}{e.StackTrace}");
+
+                return Problem(statusCode: 500);
+            }
         }
     }
 }

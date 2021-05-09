@@ -1,8 +1,8 @@
 ﻿using Jitsukawa.EmailSender.Api.Models;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Jitsukawa.EmailSender.Api.Services
@@ -16,9 +16,9 @@ namespace Jitsukawa.EmailSender.Api.Services
             settings = configuration.Value;
         }
 
-        public async Task<string[]> Send(EmailMessage e)
+        public async Task Send(EmailMessage e)
         {
-            var fails = new List<string>();
+            var fails = new StringBuilder();
 
             var client = new SmtpClient(settings.SMTP, settings.Port)
             {
@@ -47,11 +47,14 @@ namespace Jitsukawa.EmailSender.Api.Services
                 }
                 catch
                 {
-                    fails.Add(recipient);
+                    fails.Append($"{recipient}, ");
                 }
             }
 
-            return fails.ToArray();
+            if (fails.Length > 0)
+            {
+                throw new Fail($"Falharam: {fails.ToString().TrimEnd(' ', ',')}.");
+            }
         }
     }
 }
