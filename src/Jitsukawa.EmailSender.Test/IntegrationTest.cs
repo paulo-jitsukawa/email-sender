@@ -1,5 +1,4 @@
 ﻿using Jitsukawa.EmailSender.Api;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,10 +8,10 @@ using Xunit;
 
 namespace Jitsukawa.EmailSender.Test
 {
-    public class IntegrationTest : IClassFixture<WebApplicationFactory<Startup>>
+    public class IntegrationTest : IClassFixture<WebAppFactory<Startup>>
     {
-        protected readonly WebApplicationFactory<Startup> factory;
-        public IntegrationTest(WebApplicationFactory<Startup> factory)
+        protected readonly WebAppFactory<Startup> factory;
+        public IntegrationTest(WebAppFactory<Startup> factory)
         {
             this.factory = factory;
         }

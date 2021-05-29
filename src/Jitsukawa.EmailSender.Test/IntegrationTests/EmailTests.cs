@@ -10,7 +10,7 @@ namespace Jitsukawa.EmailSender.Test.IntegrationTests
 {
     public class EmailTests : IntegrationTest
     {
-        public EmailTests(WebApplicationFactory<Startup> factory) : base(factory) { }
+        public EmailTests(WebAppFactory<Startup> factory) : base(factory) { }
 
 #warning Substitua "email_de_teste@provedor.com.br" por um endereço válido seu. 
         private const string ValidEmailAdress = "email_de_teste@provedor.com.br";
