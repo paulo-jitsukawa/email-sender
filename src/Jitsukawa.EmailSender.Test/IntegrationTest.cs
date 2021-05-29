@@ -23,7 +23,7 @@ namespace Jitsukawa.EmailSender.Test
             return client;
         }
 
-        protected async Task<(HttpStatusCode Code, string Response)> Get(string url, HttpClient client)
+        protected static async Task<(HttpStatusCode Code, string Response)> Get(string url, HttpClient client)
         {
             var result = await client.GetAsync(url);
             var response = await result.Content.ReadAsStringAsync();
@@ -31,7 +31,7 @@ namespace Jitsukawa.EmailSender.Test
             return (result.StatusCode, response);
         }
 
-        protected async Task<(HttpStatusCode Code, string Response)> Post(string json, string url, HttpClient client)
+        protected static async Task<(HttpStatusCode Code, string Response)> Post(string json, string url, HttpClient client)
         {
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -41,7 +41,7 @@ namespace Jitsukawa.EmailSender.Test
             return (result.StatusCode, response);
         }
 
-        protected async Task<(HttpStatusCode Code, string Response)> Put(string json, string url, HttpClient client)
+        protected static async Task<(HttpStatusCode Code, string Response)> Put(string json, string url, HttpClient client)
         {
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -51,7 +51,7 @@ namespace Jitsukawa.EmailSender.Test
             return (result.StatusCode, response);
         }
 
-        protected async Task<(HttpStatusCode Code, string Response)> Delete(string url, HttpClient client)
+        protected static async Task<(HttpStatusCode Code, string Response)> Delete(string url, HttpClient client)
         {
             var result = await client.DeleteAsync(url);
             var response = await result.Content.ReadAsStringAsync();

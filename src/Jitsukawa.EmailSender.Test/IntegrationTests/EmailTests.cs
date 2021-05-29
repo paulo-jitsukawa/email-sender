@@ -1,6 +1,5 @@
 ﻿using Jitsukawa.EmailSender.Api;
 using Jitsukawa.EmailSender.Api.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -37,9 +36,9 @@ namespace Jitsukawa.EmailSender.Test.IntegrationTests
 
             var json = JsonSerializer.Serialize(message);
 
-            var result = await Post(json, "api/v1/email", client);
+            var (Code, _) = await Post(json, "api/v1/email", client);
 
-            Assert.Equal(HttpStatusCode.Unauthorized, result.Code);
+            Assert.Equal(HttpStatusCode.Unauthorized, Code);
         }
 
         /// <summary>
@@ -55,9 +54,9 @@ namespace Jitsukawa.EmailSender.Test.IntegrationTests
         {
             var client = CreateClient("c20c5ea0964b46a284f60217a2285000");
 
-            var result = await Post(json, "api/v1/email", client);
+            var (Code, _) = await Post(json, "api/v1/email", client);
 
-            Assert.NotEqual(HttpStatusCode.OK, result.Code);
+            Assert.NotEqual(HttpStatusCode.OK, Code);
         }
 
         /// <summary>
@@ -78,12 +77,12 @@ namespace Jitsukawa.EmailSender.Test.IntegrationTests
 
             var json = JsonSerializer.Serialize(message);
 
-            var result = await Post(json, "api/v1/email", client);
+            var (Code, Response) = await Post(json, "api/v1/email", client);
 
-            Assert.Equal(HttpStatusCode.BadRequest, result.Code);
-            Assert.Contains("\"status\":422", result.Response);
-            Assert.Contains(InvalidEmailAdress, result.Response);
-            Assert.DoesNotContain(ValidEmailAdress, result.Response);
+            Assert.Equal(HttpStatusCode.BadRequest, Code);
+            Assert.Contains("\"status\":422", Response);
+            Assert.Contains(InvalidEmailAdress, Response);
+            Assert.DoesNotContain(ValidEmailAdress, Response);
         }
     }
 }

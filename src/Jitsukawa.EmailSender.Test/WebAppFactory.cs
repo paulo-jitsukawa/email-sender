@@ -11,11 +11,9 @@ namespace Jitsukawa.EmailSender.Test
         {
             builder.ConfigureServices(services =>
             {
-                using (var scope = services.BuildServiceProvider().CreateScope())
-                {
-                    var scopedServices = scope.ServiceProvider;
-                    var logger = scopedServices.GetRequiredService<ILogger<WebAppFactory<TStartup>>>();
-                }
+                using var scope = services.BuildServiceProvider().CreateScope();
+                var scopedServices = scope.ServiceProvider;
+                var logger = scopedServices.GetRequiredService<ILogger<WebAppFactory<TStartup>>>();
             });
         }
     }
